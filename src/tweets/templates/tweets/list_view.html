@@ -1,0 +1,9 @@
+{% for object in object_list %}
+{{ object.user }} posted
+{{ object.timestamp|timesince}} ago<br>
+{{ object.content }}
+<br>
+<hr>
+{% empty %}
+No Tweets
+{% endfor %}
