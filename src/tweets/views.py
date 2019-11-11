@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.db.models import Q
 from django.views.generic import (DetailView, ListView,
                                   CreateView, UpdateView,
                                   DeleteView)
@@ -36,5 +37,15 @@ class TweetDetailView(DetailView):
 
 
 class TweetListView(ListView):
-    queryset = Tweet.objects.all()
     template_name = 'tweets/list_view.html'
+
+    def get_queryset(self, *args, **kwargs):
+        qs = Tweet.objects.all()
+        print(self.request.GET)
+        query = self.request.GET.get('q', None)
+        if query is not None:
+            qs = qs.filter(
+                Q(content__icontains=query) |
+                Q(user__username__icontains=query)
+            )
+        return qs
