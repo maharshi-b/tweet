@@ -1,4 +1,53 @@
 {% extends 'base.html' %}
+
+
+
+
+
+{% block script %}
+<script>
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, '\\$&');
+        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    }
+    $(document).ready(function () {
+        console.log('Working');
+        var query = getParameterByName('q')
+        console.log(query)
+        $.ajax({
+            url: "/api/tweets/",
+            data: {
+                "q": query
+            },
+            method: "GET",
+            success: function (data) {
+                $.each(data, function (key, value) {
+                    var tweetContent = value.content;
+                    var tweetUser = value.user;
+                    var tweetkey = value.key;
+                    $("#tweet-container").append(
+                        "<div class=\"media\"><div class=\"media - body\"> <h5 class=\"media - heading\">"
+                        + tweetContent + "</h5>by " + tweetUser.username
+                        + " | <a href=\"#\">View</a></div></div><hr>"
+                    )
+                });
+            },
+            error: function (data) {
+                console.log('Error');
+                console.log(data);
+            }
+        });
+    });
+</script>
+{% endblock %}
+
+
+
 {% block content %}
 
 <div class="row">
@@ -12,23 +61,7 @@
         </div>
         <hr>
         {% endif %}
-        {% for object in object_list %}
-        <div class="media">
-            <div class="media-body">
-                <h5 class="media-heading">{{ object.content }}</h5>
-                by {{object.user}} | {{ object.timestamp|timesince}} ago | <a
-                    href="{{object.get_absolute_url}}">View</a>
-            </div>
-        </div>
-        <hr>
-        {% empty %}
-        {% if request.GET.q %}
-        Not found
-        {% else %}
-        No Tweets
-        {% endif %}
-        {% endfor %}
-
+        <div id="tweet-container"></div>
     </div>
 </div>
 

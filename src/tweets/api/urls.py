@@ -5,7 +5,7 @@ from .views import (
 )
 app_name = 'tweet-api'
 urlpatterns = [
-    path('', TweetListApiView.as_view(), name="api-list"),
+    path('', TweetListApiView.as_view(), name="list"),
     # path('<int:pk>/', TweetDetailView.as_view(), name="detail"),
     # path('create/', TweetCreateView.as_view(), name='create'),
     # path('<int:pk>/edit', TweetUpdateView.as_view(), name="update"),
