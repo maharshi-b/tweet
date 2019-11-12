@@ -25,6 +25,7 @@ urlpatterns = [
     path('', TweetListView.as_view(), name="home"),
     path('admin/', admin.site.urls),
     path('tweets/', include("tweets.urls")),
+    path('api/tweets/', include("tweets.api.urls")),
 ]
 if settings.DEBUG:
     urlpatterns += (static(settings.STATIC_URL,
