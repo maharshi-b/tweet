@@ -16,17 +16,14 @@
         return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
     $(document).ready(function () {
-        console.log('Working');
         var query = getParameterByName('q')
-        console.log(query)
-        $.ajax({
-            url: "/api/tweets/",
-            data: {
-                "q": query
-            },
-            method: "GET",
-            success: function (data) {
-                $.each(data, function (key, value) {
+        var tweetList = []
+        function parseTweets() {
+            if (tweetList == 0) {
+                $("#tweet-container").append("<h3>Empty</h3>");
+            } else {
+                //Tweets Exist 
+                $.each(tweetList, function (key, value) {
                     var tweetContent = value.content;
                     var tweetUser = value.user;
                     var tweetkey = value.key;
@@ -36,6 +33,19 @@
                         + " | <a href=\"#\">View</a></div></div><hr>"
                     )
                 });
+            }
+        }
+
+        console.log(query)
+        $.ajax({
+            url: "/api/tweets/",
+            data: {
+                "q": query
+            },
+            method: "GET",
+            success: function (data) {
+                tweetList = data;
+                parseTweets();
             },
             error: function (data) {
                 console.log('Error');
@@ -61,7 +71,8 @@
         </div>
         <hr>
         {% endif %}
-        <div id="tweet-container"></div>
+        <div id="tweet-container">
+        </div>
     </div>
 </div>
 
