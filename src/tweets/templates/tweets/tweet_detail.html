@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-3 col-xs-12" style="background-color: yellow;">
+        <h1>{{object.user}}</h1>
+    </div>
+    <div class="col-sm-9 col-xs-12">
+        <div class="media">
+            <div class="media-body">
+                <br>
+                <h5 class="media-heading">{{ object.content }}</h5>
+                {{ object.timestamp|timesince}} ago
+            </div>
+        </div>
+        <hr>
+    </div>
+</div>
+
+{% endblock content %}
