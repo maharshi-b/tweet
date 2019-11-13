@@ -1,4 +1,3 @@
-# tweetme
-Twitter Clone project in django
-[not yet completed]
+# Tweet
+Twitter Clone project in django<br>
 [Still developing]
