@@ -19,6 +19,7 @@
         var query = getParameterByName('q')
         var tweetList = []
         function parseTweets() {
+            $("#tweet-container").empty();
             if (tweetList == 0) {
                 $("#tweet-container").append("<h3>Empty</h3>");
             } else {
@@ -26,31 +27,55 @@
                 $.each(tweetList, function (key, value) {
                     var tweetContent = value.content;
                     var tweetUser = value.user;
+                    var dateDisplay = value.date_display;
+                    var timeSince = value.timesince;
                     var tweetkey = value.key;
                     $("#tweet-container").append(
                         "<div class=\"media\"><div class=\"media - body\"> <h5 class=\"media - heading\">"
                         + tweetContent + "</h5>by " + tweetUser.username
-                        + " | <a href=\"#\">View</a></div></div><hr>"
+                        + " | " + timeSince + " | <a href=\"#\">View</a></div></div><hr>"
                     )
                 });
             }
         }
 
         console.log(query)
-        $.ajax({
-            url: "/api/tweets/",
-            data: {
-                "q": query
-            },
-            method: "GET",
-            success: function (data) {
-                tweetList = data;
-                parseTweets();
-            },
-            error: function (data) {
-                console.log('Error');
-                console.log(data);
-            }
+        function fetchTweets() {
+            $.ajax({
+                url: "/api/tweets/",
+                data: {
+                    "q": query
+                },
+                method: "GET",
+                success: function (data) {
+                    tweetList = data;
+                    parseTweets();
+                },
+                error: function (data) {
+                    console.log('Error');
+                    console.log(data);
+                }
+            });
+        }
+        fetchTweets();
+        $("#tweet-form").submit(function (event) {
+            event.preventDefault()
+            var this_ = $(this)
+            var formData = this_.serialize()
+            $.ajax({
+                url: "/api/tweets/create/",
+                data: formData,
+                method: "POST",
+                success: function (data) {
+                    this_.find("input[type=text], textarea").val("")
+                    console.log('Tweeted Successfully')
+                    fetchTweets()
+                },
+                error: function (data) {
+                    console.log('Error');
+                    console.log(data.status);
+                }
+            });
         });
     });
 </script>
@@ -67,7 +92,7 @@
     <div class="col-sm-9 col-xs-12">
         {% if not request.GET.q %}
         <div>
-            {% include "tweets/form.html" with form=create_form action_url=create_url btn_title='Tweet' %}
+            {% include "tweets/form.html" with form=create_form action_url=create_url btn_title='Tweet' id='tweet-form' %}
         </div>
         <hr>
         {% endif %}
