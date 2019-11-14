@@ -6,7 +6,7 @@ class TweetModelForm(forms.ModelForm):
     content = forms.CharField(
         label='',
         widget=forms.Textarea(attrs={
-            'placeholder': 'Write Something',
+            'placeholder': "What's Happening?",
         })
     )
 
