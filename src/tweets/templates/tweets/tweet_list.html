@@ -18,8 +18,8 @@
     $(document).ready(function () {
         var query = getParameterByName('q')
         var tweetList = []
+        var nextPageUrl;
         function parseTweets() {
-            $("#tweet-container").empty();
             if (tweetList == 0) {
                 $("#tweet-container").append("<h3>Empty</h3>");
             } else {
@@ -40,16 +40,30 @@
         }
 
         console.log(query)
-        function fetchTweets() {
+        function fetchTweets(url) {
+            var fetchUrl;
+            if (!url) {
+                fetchUrl = "/api/tweets/"
+            }
+            else {
+                fetchUrl = url
+            }
             $.ajax({
-                url: "/api/tweets/",
+                url: fetchUrl,
                 data: {
                     "q": query
                 },
                 method: "GET",
                 success: function (data) {
-                    tweetList = data;
-                    parseTweets();
+                    tweetList = data.results;
+                    nextPageUrl = data.next;
+                    if (nextPageUrl) {
+
+                        parseTweets();
+                        $("#loadmore").css("display", "inline")
+                    } else {
+                        $("#loadmore").css("display", "none")
+                    }
                 },
                 error: function (data) {
                     console.log('Error');
@@ -58,24 +72,51 @@
             });
         }
         fetchTweets();
+        $("#loadmore").click(function (event) {
+            event.preventDefault()
+            if (nextPageUrl) {
+                fetchTweets(nextPageUrl)
+            }
+
+        })
+        var charsStart = 140;
+        var charsCurrent = 0;
+        $("#tweet-form").append("<span id='tweetCharsLeft'>" + charsStart + "</span>")
+        $("#tweet-form textarea").keydown(function (event) {
+
+            var tweetValue = $(this).val()
+            charsCurrent = charsStart - tweetValue.length
+            var spanChars = $("#tweetCharsLeft")
+            spanChars.text(charsCurrent)
+            if (charsCurrent >= 0) {
+                spanChars.removeClass("red-color")
+            } else {
+                spanChars.addClass("red-color")
+            }
+        })
         $("#tweet-form").submit(function (event) {
             event.preventDefault()
             var this_ = $(this)
             var formData = this_.serialize()
-            $.ajax({
-                url: "/api/tweets/create/",
-                data: formData,
-                method: "POST",
-                success: function (data) {
-                    this_.find("input[type=text], textarea").val("")
-                    console.log('Tweeted Successfully')
-                    fetchTweets()
-                },
-                error: function (data) {
-                    console.log('Error');
-                    console.log(data.status);
-                }
-            });
+            if (charsCurrent >= 0) {
+                $.ajax({
+                    url: "/api/tweets/create/",
+                    data: formData,
+                    method: "POST",
+                    success: function (data) {
+                        this_.find("input[type=text], textarea").val("")
+                        console.log('Tweeted Successfully')
+                        $("#tweet-container").empty();
+                        fetchTweets()
+                    },
+                    error: function (data) {
+                        console.log('Error');
+                        console.log(data.status);
+                    }
+                });
+            } else {
+                console.log("CANT SEND TOO MANY CHARS")
+            }
         });
     });
 </script>
@@ -98,6 +139,7 @@
         {% endif %}
         <div id="tweet-container">
         </div>
+        <a href="#" id='loadmore'>Load More</a>
     </div>
 </div>
 
