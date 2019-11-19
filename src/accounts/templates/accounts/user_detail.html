@@ -2,8 +2,11 @@
 {% block content %}
 
 <div class="row">
-    <div class="col-sm-3 col-xs-12" style="background-color: blue;">
+    <div class="col-sm-3 col-xs-12">
         <h1>{{object.username}}</h1>
+        <a class="btn btn-link" href="{% url 'profiles:follow' username=object.username %}">
+            {% if following %}Unfollow{% else %}Follow{% endif %}
+        </a>
     </div>
     <div class="col-sm-9 col-xs-12">
         <h1>Tweets</h1>
