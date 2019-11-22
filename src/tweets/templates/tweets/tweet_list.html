@@ -41,12 +41,21 @@
                     var dateDisplay = value.date_display;
                     var timeSince = value.timesince;
                     var tweetkey = value.key;
-                    var isRetweet = value.is_retweet;
-                    $("#tweet-container").append(
-                        "<div class=\"media\"><div class=\"media-body\">" + isRetweet + " <h5 class=\"media-heading\">"
-                        + tweetContent + "</h5>by <a href='" + tweetUser.url + "'>" + tweetUser.username
-                        + "</a> | " + timeSince + " | <a href='/tweets/" + value.id + "'>View</a></div></div><hr>"
-                    )
+                    var tweetFormattedHtml;
+                    if (value.parent) {
+                        var mainTweet = value.parent
+                        tweetFormattedHtml = "<div class=\"media\"><div class=\"media-body\"><span class='gray-color'>"
+                            + tweetUser.username + " Retweeted</span><br><h5 class=\"media-heading\">"
+                            + mainTweet.content + "</h5>by <a href='" + mainTweet.user.url + "'>" + mainTweet.user.username
+                            + "</a> | " + mainTweet.timesince + " | <a href='/tweets/" + mainTweet.id + "'>View</a></div></div><hr>"
+
+                    }
+                    else {
+                        tweetFormattedHtml = "<div class=\"media\"><div class=\"media-body\"><h5 class=\"media-heading\">"
+                            + tweetContent + "</h5>by <a href='" + tweetUser.url + "'>" + tweetUser.username
+                            + "</a> | " + timeSince + " | <a href='/tweets/" + value.id + "'>View</a></div></div><hr>"
+                    }
+                    $("#tweet-container").append(tweetFormattedHtml)
                 });
             }
         }
