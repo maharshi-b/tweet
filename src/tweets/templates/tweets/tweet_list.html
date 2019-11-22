@@ -47,13 +47,17 @@
                         tweetFormattedHtml = "<div class=\"media\"><div class=\"media-body\"><span class='gray-color'>"
                             + tweetUser.username + " Retweeted</span><br><h5 class=\"media-heading\">"
                             + mainTweet.content + "</h5>by <a href='" + mainTweet.user.url + "'>" + mainTweet.user.username
-                            + "</a> | " + mainTweet.timesince + " | <a href='/tweets/" + mainTweet.id + "'>View</a></div></div><hr>"
+                            + "</a> | " + mainTweet.timesince + " | <a href='/tweets/" + mainTweet.id + "'>View</a>"
+                            + " | <a href='/tweets/" + mainTweet.id + "/retweet'>Retweet</a>"
+                            + "</div></div><hr>"
 
                     }
                     else {
                         tweetFormattedHtml = "<div class=\"media\"><div class=\"media-body\"><h5 class=\"media-heading\">"
                             + tweetContent + "</h5>by <a href='" + tweetUser.url + "'>" + tweetUser.username
-                            + "</a> | " + timeSince + " | <a href='/tweets/" + value.id + "'>View</a></div></div><hr>"
+                            + "</a> | " + timeSince + " | <a href='/tweets/" + value.id + "'>View</a>"
+                            + " | <a href='/tweets/" + value.id + "/retweet'>Retweet</a>"
+                            + "</div></div><hr>"
                     }
                     $("#tweet-container").append(tweetFormattedHtml)
                 });
