@@ -14,5 +14,5 @@ class HashTag(models.Model):
     def get_tweets(self):
         return Tweet.objects.filter(content__icontains='#' + self.tag)
 
-    def get_absolute_url():
+    def get_absolute_url(self):
         return reverse_lazy("hashtag", kwargs={'hashtag': self.tag})
