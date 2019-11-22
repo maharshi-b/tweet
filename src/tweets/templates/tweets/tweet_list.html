@@ -41,10 +41,11 @@
                     var dateDisplay = value.date_display;
                     var timeSince = value.timesince;
                     var tweetkey = value.key;
+                    var isRetweet = value.is_retweet;
                     $("#tweet-container").append(
-                        "<div class=\"media\"><div class=\"media-body\"> <h5 class=\"media-heading\">"
+                        "<div class=\"media\"><div class=\"media-body\">" + isRetweet + " <h5 class=\"media-heading\">"
                         + tweetContent + "</h5>by <a href='" + tweetUser.url + "'>" + tweetUser.username
-                        + "</a> | " + timeSince + " | <a href=\"#\">View</a></div></div><hr>"
+                        + "</a> | " + timeSince + " | <a href='/tweets/" + value.id + "'>View</a></div></div><hr>"
                     )
                 });
             }
