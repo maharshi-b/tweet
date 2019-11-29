@@ -1,6 +1,9 @@
+import re
 from django.db import models
 from django.conf import settings
 from django.urls import reverse
+from django.db.models.signals import post_save
+
 # Create your models here.
 
 
@@ -40,3 +43,19 @@ class Tweet(models.Model):
 
     class Meta:
         ordering = ['-timestamp']
+
+
+def tweet_save_receiver(sender, instance, created, *args, **kwargs):
+    if created and not instance.parent:
+        user_regex = r'@(?P<username>[\w,@+-]+)'
+        m = re.findall(user_regex, instance.content)
+        print('dd')
+        if m:
+            print(m)
+        hash_regex = r'#(?P<hashtag>[\w\d-]+)'
+        hm = re.findall(hash_regex, instance.content)
+        if hm:
+            print(hm)
+
+
+post_save.connect(tweet_save_receiver, sender=Tweet)
