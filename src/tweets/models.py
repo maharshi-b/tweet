@@ -3,6 +3,7 @@ from django.db import models
 from django.conf import settings
 from django.urls import reverse
 from django.db.models.signals import post_save
+from hashtags.signals import parsed_hashtags
 
 # Create your models here.
 
@@ -48,14 +49,11 @@ class Tweet(models.Model):
 def tweet_save_receiver(sender, instance, created, *args, **kwargs):
     if created and not instance.parent:
         user_regex = r'@(?P<username>[\w,@+-]+)'
-        m = re.findall(user_regex, instance.content)
-        print('dd')
-        if m:
-            print(m)
+        usernames = re.findall(user_regex, instance.content)
+
         hash_regex = r'#(?P<hashtag>[\w\d-]+)'
-        hm = re.findall(hash_regex, instance.content)
-        if hm:
-            print(hm)
+        hashtags = re.findall(hash_regex, instance.content)
+        parsed_hashtags.send(sender=instance.__class__, hashtag_list=hashtags)
 
 
 post_save.connect(tweet_save_receiver, sender=Tweet)
