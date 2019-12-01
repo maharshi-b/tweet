@@ -63,11 +63,9 @@
                     success: function (data) {
                         if (data.liked) {
                             this_.text("Liked")
-                            console.log("Liked Sucxcess")
                         }
                         else {
                             this_.text("Like")
-                            console.log("unLiked Sucxcess")
                         }
                     },
                     error: function (data) {
@@ -112,6 +110,10 @@
                 var dateDisplay = tweetValue.date_display;
                 var tweetContent = tweetValue.content;
                 var timeSince = tweetValue.timesince;
+                var verb = 'Like'
+                if (tweetValue.did_like) {
+                    verb = "Liked"
+                }
                 var tweetUser = tweetValue.user;
                 var tweetFormattedHtml;
                 if (retweet && tweetValue.parent) {
@@ -121,7 +123,7 @@
                         + mainTweet.content + "</h5>by <a href='" + mainTweet.user.url + "'>" + mainTweet.user.username
                         + "</a> | " + mainTweet.timesince + " | <a href='/tweets/" + mainTweet.id + "'>View</a>"
                         + " | <a class='retweet-btn' href='/tweets/" + tweetValue.id + "/retweet'>Retweet</a>"
-                        + " | <a class='tweet-like' data-id=" + tweetValue.id + " href='/tweets/'>Like</a>"
+                        + " | <a class='tweet-like' data-id=" + tweetValue.id + " href='/tweets/'>" + verb + " (" + tweetValue.likes + ")</a>"
                         + "</div></div><hr>"
                 }
                 else {
@@ -129,7 +131,7 @@
                         + tweetContent + "</h5>by <a href='" + tweetUser.url + "'>" + tweetUser.username
                         + "</a> | " + timeSince + " | <a href='/tweets/" + tweetValue.id + "'>View</a>"
                         + " | <a class='retweet-btn' href='/tweets/" + tweetValue.id + "/retweet'>Retweet</a>"
-                        + " | <a class='tweet-like' data-id=" + tweetValue.id + " href='/tweets/'>Like</a>"
+                        + " | <a class='tweet-like' data-id=" + tweetValue.id + " href='/tweets/'>" + verb + " (" + tweetValue.likes + ")</a>"
                         + "</div></div><hr>"
                 }
                 if (prepend == true) {
