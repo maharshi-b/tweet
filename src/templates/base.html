@@ -51,6 +51,32 @@
             }
             var initialUrl = tweetContainer.attr('data-url') || "/api/tweets/";
 
+            $(document.body).on("click", ".tweet-like", function (event) {
+                event.preventDefault()
+                var this_ = $(this)
+                var tweetId = this_.attr("data-id")
+                var likedUrl = "/api/tweets/" + tweetId + "/like/"
+                // this_.text("Liked")
+                $.ajax({
+                    method: "GET",
+                    url: likedUrl,
+                    success: function (data) {
+                        if (data.liked) {
+                            this_.text("Liked")
+                            console.log("Liked Sucxcess")
+                        }
+                        else {
+                            this_.text("Like")
+                            console.log("unLiked Sucxcess")
+                        }
+                    },
+                    error: function (data) {
+                        console.log("Like Error")
+                        console.log(data)
+                    }
+
+                })
+            })
             $(document.body).on("click", ".retweet-btn", function (event) {
                 event.preventDefault()
                 var url = "/api" + $(this).attr("href")
@@ -94,7 +120,8 @@
                         + tweetUser.username + " Retweeted</span><br><h5 class=\"media-heading\">"
                         + mainTweet.content + "</h5>by <a href='" + mainTweet.user.url + "'>" + mainTweet.user.username
                         + "</a> | " + mainTweet.timesince + " | <a href='/tweets/" + mainTweet.id + "'>View</a>"
-                        + " | <a class='retweet-btn' href='/tweets/" + mainTweet.id + "/retweet'>Retweet</a>"
+                        + " | <a class='retweet-btn' href='/tweets/" + tweetValue.id + "/retweet'>Retweet</a>"
+                        + " | <a class='tweet-like' data-id=" + tweetValue.id + " href='/tweets/'>Like</a>"
                         + "</div></div><hr>"
                 }
                 else {
@@ -102,6 +129,7 @@
                         + tweetContent + "</h5>by <a href='" + tweetUser.url + "'>" + tweetUser.username
                         + "</a> | " + timeSince + " | <a href='/tweets/" + tweetValue.id + "'>View</a>"
                         + " | <a class='retweet-btn' href='/tweets/" + tweetValue.id + "/retweet'>Retweet</a>"
+                        + " | <a class='tweet-like' data-id=" + tweetValue.id + " href='/tweets/'>Like</a>"
                         + "</div></div><hr>"
                 }
                 if (prepend == true) {
