@@ -1,6 +1,6 @@
 # Tweet
 **Twitter Clone project in django rest framework**<br>
-***[Still developing]***<br><br>
+***[Still developing...]***<br><br>
 1. Clone the repository<br>```git clone https://github.com/maharshi-b/tweet.git```<br><br>
 2.  Install all dependent packages<br>
 ```pip install -r requirements.txt```<br><br>
